@@ -20,6 +20,7 @@ def run():
         install_requires=[
             'lank',
             'pyglet',
+            'pystray',
         ],
         entry_points = {
             'console_scripts': [
