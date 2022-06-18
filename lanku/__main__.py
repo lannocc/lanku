@@ -1,8 +1,9 @@
-from . import Main
+from . import Application
 
 
 def run():
-    Main().run()
+    app = Application()
+    app.run()
 
 
 if __name__ == '__main__':
