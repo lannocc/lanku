@@ -17,6 +17,8 @@ class Application:
         self.tray_icon = TrayIcon(self)
         self.tray = Thread(target=self.tray_icon.run)
         self.home = Home(self)
+
+        self.finished = False
         self.exiting = False
 
     def run(self):
@@ -25,6 +27,7 @@ class Application:
             self.tray.start()
             self.show_hide()
             pyglet.app.run()
+            self.finished = True
 
         except KeyboardInterrupt:
             pass
@@ -39,8 +42,8 @@ class Application:
 
         else:
             self.home.set_visible(not self.home.visible)
-            if self.home.visible:
-                self.home.set_location(100, 100)
+            #if self.home.visible:
+            #    self.home.set_location(100, 100)
 
     def quit(self):
         if self.exiting: return
@@ -48,6 +51,10 @@ class Application:
         print('quit')
 
         self.tray_icon.stop()
+
+        if not self.finished:
+            self.home.save()
+
         pyglet.app.exit()
 
 
