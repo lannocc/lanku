@@ -22,6 +22,7 @@ class Window(Base):
         self.label = Label(f'lanku v{__version__}')
 
     def save(self):
+        if self.minimized: return
         x, y = self.get_location()
         w, h = self.get_size()
         save_home_config(x, y, w, h)
@@ -60,6 +61,7 @@ class Window(Base):
         self.minimized = False
 
     def on_hide(self):
+        self.save()
         self.minimized = True
 
     def on_close(self):

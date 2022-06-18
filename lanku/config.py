@@ -20,6 +20,6 @@ def load_home_config():
 
 def save_home_config(x, y, w, h):
     with open(HOME, 'w') as home:
-        print(f'{x},{y},{w},{h}')
+        #print(f'{x},{y},{w},{h}')
         home.write(f'{x},{y},{w},{h}')
 

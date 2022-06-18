@@ -1,6 +1,8 @@
 Copyright (C) 2022 LANNOCC (Shawn A. Wilson)
 @%@~LICENSE:MIT~@%@
 
+saw_061822_2 - Fixing previous commit for Windows.
+
 saw_061822_1 - Save window size/position.
 
 saw_061722_3 - Improved window behavior and organization.
