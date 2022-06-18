@@ -9,17 +9,18 @@ DIRS = AppDirs('lanku', 'LANNOCC')
 if not exists(DIRS.user_data_dir):
     makedirs(DIRS.user_data_dir)
 
-HOME = join(DIRS.user_data_dir, 'home')
-
-def load_home_config():
-    if not exists(HOME):
+def load_win_config(name):
+    config = join(DIRS.user_data_dir, name)
+    if not exists(config):
         return None
 
-    with open(HOME, 'r') as home:
-        return [ int(x) for x in home.readline().strip().split(',') ]
+    with open(config, 'r') as config:
+        return [ int(x) for x in config.readline().strip().split(',') ]
 
-def save_home_config(x, y, w, h):
-    with open(HOME, 'w') as home:
+def save_win_config(name, x, y, w, h):
+    config = join(DIRS.user_data_dir, name)
+
+    with open(config, 'w') as config:
         #print(f'{x},{y},{w},{h}')
-        home.write(f'{x},{y},{w},{h}')
+        config.write(f'{x},{y},{w},{h}')
 
