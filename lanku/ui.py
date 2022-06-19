@@ -1,11 +1,21 @@
 from .config import *
 
 from pyglet.window import Window as PWin
+from pyglet.graphics import Batch
 from pyglet.image import ImageData
 from pyglet.text import Label
+from pyglet.gui import Frame, PushButton
 from pyglet import clock
+import pyglet.resource
+pyglet.resource.path = ['@lanku']
+pyglet.resource.reindex()
 
 import platform
+from os.path import join
+
+
+def image(name):
+    return pyglet.resource.image(join('assets', name))
 
 
 class LWin(PWin):
@@ -23,6 +33,13 @@ class LWin(PWin):
         icon = self.app.icon
         self.set_icon(ImageData(icon.width, icon.height, 'RGBA',
             icon.tobytes(), pitch=-icon.width*4))
+
+        self.frame = Frame(self)
+        self.batch = Batch()
+
+    def on_draw(self):
+        self.clear()
+        self.batch.draw()
 
     def save(self):
         if not self.save_name or not self.xywh: return
@@ -74,11 +91,6 @@ class LWin(PWin):
                 #clock.schedule_once(self.refresh, 0.1)
                 clock.schedule_once(self.null, 0.1)
 
-    def on_draw(self):
-        #print('draw')
-        self.clear()
-        self.label.draw()
-
     def on_show(self):
         #print('show')
         self.minimized = False
@@ -112,4 +124,36 @@ class LWin(PWin):
     def on_close(self):
         self.save()
         super().on_close()
+
+
+class TabGroup:
+    def __init__(self):
+        self.tabs = [ ]
+
+    def _add_(self, tab):
+        self.tabs.append(tab)
+
+
+class Tab(PushButton):
+    def __init__(self, tab_group, x, y, pressed, depressed, hover=None,
+                 batch=None, group=None):
+        super().__init__(x, y, pressed, depressed, hover, batch, group)
+
+        self.tg = tab_group
+        self.tg._add_(self)
+
+    def on_mouse_press(self, x, y, buttons, modifiers):
+        if not self.enabled or self._pressed or not self._check_hit(x, y):
+            return
+
+        self._pressed = not self._pressed
+        self._sprite.image = self._pressed_img
+
+        for tab in self.tg.tabs:
+            if tab is self or not tab._pressed: continue
+            tab._pressed = False
+            tab._sprite.image = tab._depressed_img
+
+    def on_mouse_release(self, x, y, buttons, modifiers):
+        pass
 

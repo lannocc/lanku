@@ -28,6 +28,7 @@ def run():
                 'lanku=lanku.__main__:run',
             ],
         },
+        include_package_data=True,
     )
 
 
