@@ -1,6 +1,8 @@
 Copyright (C) 2022 LANNOCC (Shawn A. Wilson)
 @%@~LICENSE:MIT~@%@
 
+saw_061822_5 - Swap tab normal/pushed colors. Fix for Windows loading assets.
+
 saw_061822_4 - Starting to set up some tabs.
 
 saw_061822_3 - More window shenanigans.

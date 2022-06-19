@@ -11,11 +11,10 @@ pyglet.resource.path = ['@lanku']
 pyglet.resource.reindex()
 
 import platform
-from os.path import join
 
 
 def image(name):
-    return pyglet.resource.image(join('assets', name))
+    return pyglet.resource.image(f'assets/{name}'))
 
 
 class LWin(PWin):
