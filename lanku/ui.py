@@ -14,7 +14,7 @@ import platform
 
 
 def image(name):
-    return pyglet.resource.image(f'assets/{name}'))
+    return pyglet.resource.image(f'assets/{name}')
 
 
 class LWin(PWin):
