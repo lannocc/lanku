@@ -1,6 +1,8 @@
 Copyright (C) 2022 LANNOCC (Shawn A. Wilson)
 @%@~LICENSE:MIT~@%@
 
+saw_061922_2 - Improved placement which considers window decorations offset.
+
 saw_061922_1 - Now have a basic component model.
 
 saw_061822_6 - Fix syntax error.

@@ -38,6 +38,9 @@ class LWin(PWin):
         self.batch = Batch()
         self.components = [ ]
 
+        self.offset_for = None
+        self.offset = None
+
     def _add_(self, child):
         self.components.append(child)
 
@@ -63,8 +66,43 @@ class LWin(PWin):
 
     def place(self):
         if not self.xywh: return
-        self.set_location(self.xywh[0], self.xywh[1])
+        #print(f'location set: {self.xywh[0]}, {self.xywh[1]}')
+        x = self.xywh[0]
+        y = self.xywh[1]
+
+        if self.offset:
+            x += self.offset[0]
+            y += self.offset[1]
+        else:
+            self.offset_for = (x, y)
+
+        #print(f'actual set_location: {x}, {y}')
         self.set_size(self.xywh[2], self.xywh[3])
+        self.set_location(x, y)
+
+        if not self.offset:
+            clock.schedule_once(self.place_offset, 0.5)
+
+    def place_offset(self, dt):
+        #print(f'location get: {self.get_location()}')
+        x = self.offset_for[0]
+        y = self.offset_for[1]
+
+        #if x != self.offset_for[0] or y != self.offset_for[1]:
+        #    print('bail')
+        #    return
+
+        pos = self.get_location()
+        self.offset = (x - pos[0], y - pos[1])
+        #print(f'computed window offset: {self.offset}')
+
+        if any(self.offset):
+            #self.place()
+            self.xywh[0] += self.offset[0]
+            self.xywh[1] += self.offset[1]
+            #print(f'adjusted xywh: {self.xywh}')
+
+        self.offset_for = None
 
     def null(self, dt):
         #print('null')
@@ -109,6 +147,11 @@ class LWin(PWin):
     def on_move(self, x, y):
         #print(f'move {x},{y}')
         if x < 0 or y < 0: return
+
+        if not self.offset_for and self.offset:
+            x += self.offset[0]
+            y += self.offset[1]
+
         if self.xywh:
             self.xywh[0] = x
             self.xywh[1] = y
