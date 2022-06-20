@@ -2,9 +2,10 @@ from .config import *
 
 from pyglet.window import Window as PWin
 from pyglet.graphics import Batch
+from pyglet.shapes import Rectangle
 from pyglet.image import ImageData
-from pyglet.text import Label
-from pyglet.gui import Frame, PushButton
+from pyglet.text import Label as PLabel
+from pyglet.gui import Frame as PFrame, PushButton
 from pyglet import clock
 import pyglet.resource
 pyglet.resource.path = ['@lanku']
@@ -33,12 +34,18 @@ class LWin(PWin):
         self.set_icon(ImageData(icon.width, icon.height, 'RGBA',
             icon.tobytes(), pitch=-icon.width*4))
 
-        self.frame = Frame(self)
+        self.frame = PFrame(self)
         self.batch = Batch()
+        self.components = [ ]
+
+    def _add_(self, child):
+        self.components.append(child)
 
     def on_draw(self):
         self.clear()
         self.batch.draw()
+        for child in self.components:
+            child.draw()
 
     def save(self):
         if not self.save_name or not self.xywh: return
@@ -87,7 +94,6 @@ class LWin(PWin):
 
             if not restore:
                 # hack: sometimes necessary to trigger redraw on Linux
-                #clock.schedule_once(self.refresh, 0.1)
                 clock.schedule_once(self.null, 0.1)
 
     def on_show(self):
@@ -125,34 +131,168 @@ class LWin(PWin):
         super().on_close()
 
 
-class TabGroup:
-    def __init__(self):
+class Component:
+    def __init__(self, parent, x, y, visible=True):
+        self.parent = parent
+        if isinstance(self.parent, LWin):
+            self.win = self.parent
+        else:
+            self.win = self.parent.win
+        self.pos = [x, y] # relative
+        self._visible_ = visible
+
+        self.cbatch = Batch()
+        self.cframe = LFrame(self.win, self.visible)
+
+        self.stack = [ ]
+        self.parent._add_(self)
+
+    def _add_(self, child):
+        self.stack.append(child)
+        self.cframe._add_(child)
+
+    @property
+    def visible(self):
+        return self._visible_
+
+    @visible.setter
+    def visible(self, visible):
+        self._visible_ = visible
+        if visible:
+            self.cframe.enable()
+        else:
+            self.cframe.disable()
+
+    def show(self):
+        self.visible = True
+
+    def hide(self):
+        self.visible = False
+
+    def draw(self):
+        if not self.visible: return
+        self.cbatch.draw()
+        for child in self.stack:
+            child.draw()
+
+    def get_abs_pos(self):
+        if isinstance(self.parent, LWin):
+            return self.pos
+
+        else:
+            pos = self.parent.get_abs_pos()
+            return [pos[0] + self.pos[0], pos[1] + self.pos[1]]
+
+
+class Label(Component, PLabel):
+    def __init__(self, parent, x, y, text):
+        Component.__init__(self, parent, x, y)
+        pos = self.get_abs_pos()
+        PLabel.__init__(self, text, x=pos[0], y=pos[1], batch=self.cbatch)
+        #self.cframe.add_widget(self)
+
+
+class Button(Component, PushButton):
+    def __init__(self, parent, x, y, normal, pushed, hovering):
+        Component.__init__(self, parent, x, y)
+        pos = self.get_abs_pos()
+        PushButton.__init__(self, pos[0], pos[1], pushed, normal, hovering,
+            batch=self.cbatch)
+        self.cframe.add_widget(self)
+
+
+class TabGroup(Component):
+    def __init__(self, parent, x, y, w, h):
+        super().__init__(parent, x, y)
+        self.size = [w, h]
+
         self.tabs = [ ]
+        self.tabs_width = 0
 
-    def _add_(self, tab):
-        self.tabs.append(tab)
+        pos = self.get_abs_pos()
+        self.rect = Rectangle(pos[0], pos[1], w, h, color=(42, 42, 42),
+            batch=self.cbatch)
+
+    def tab(self, panel, normal, active, hover):
+        panel.hide()
+        tab = Tab(self, normal, active, hover)
+        self.tabs_width += max(normal.width, active.width, hover.width)
+        self.tabs.append((tab, panel))
 
 
-class Tab(PushButton):
-    def __init__(self, tab_group, x, y, pressed, depressed, hover=None,
-                 batch=None, group=None):
-        super().__init__(x, y, pressed, depressed, hover, batch, group)
+class Tab(Button):
+    def __init__(self, tab_group, normal, active, hover):
+        x = tab_group.tabs_width
+        y = max(normal.height, active.height, hover.height)
 
-        self.tg = tab_group
-        self.tg._add_(self)
+        super().__init__(tab_group, x, -y, normal, active, hover)
 
-    def on_mouse_press(self, x, y, buttons, modifiers):
-        if not self.enabled or self._pressed or not self._check_hit(x, y):
-            return
+    def on_press(self):
+        for tab, panel in self.parent.tabs:
+            if tab is self:
+                tab._pressed = True
+                tab._sprite.image = self._pressed_img
+                panel.show()
 
-        self._pressed = not self._pressed
-        self._sprite.image = self._pressed_img
+            elif tab._pressed:
+                tab._pressed = False
+                tab._sprite.image = tab._depressed_img
+                panel.hide()
 
-        for tab in self.tg.tabs:
-            if tab is self or not tab._pressed: continue
-            tab._pressed = False
-            tab._sprite.image = tab._depressed_img
-
-    def on_mouse_release(self, x, y, buttons, modifiers):
+    def on_mouse_release(self, x, y, btns, mods):
         pass
+
+
+class LFrame(PFrame):
+    def __init__(self, win, enabled=True, cell_size=64, order=0):
+        self.enabled = enabled
+        super().__init__(win, cell_size, order)
+        self.stack = [ ]
+
+    def _add_(self, child):
+        self.stack.append(child)
+
+    def enable(self):
+        self.enabled = True
+        for child in self.stack:
+            if child.visible:
+                child.cframe.enable()
+
+    def disable(self):
+        self.enabled = False
+        for child in self.stack:
+            if child.visible:
+                child.cframe.disable()
+
+    def on_mouse_press(self, x, y, btns, mods):
+        if not self.enabled: return
+        super().on_mouse_press(x, y, btns, mods)
+
+    def on_mouse_release(self, x, y, btns, mods):
+        if not self.enabled: return
+        super().on_mouse_release(x, y, btns, mods)
+
+    def on_mouse_drag(self, x, y, dx, dy, btns, mods):
+        if not self.enabled: return
+        super().on_mouse_drag(x, y, dx, dy, btns, mods)
+
+    def on_mouse_scroll(self, x, y, index, direction):
+        if not self.enabled: return
+        super().on_mouse_scroll(x, y, index, direction)
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        if not self.enabled: return
+        super().on_mouse_motion(x, y, dx, dy)
+
+    def on_text(self, text):
+        if not self.enabled: return
+        super().on_text(text)
+
+    def on_text_motion(self, motion):
+        if not self.enabled: return
+        super().on_text_motion(motion)
+
+    def on_text_motion_select(self, motion):
+        if not self.enabled: return
+        super().on_text_motion_select(motion)
 

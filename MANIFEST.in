@@ -1,5 +1,6 @@
 include CHANGELOG
 include LICENSE
 include README.md
+include com.lannocc.lanku.desktop
 recursive-include lanku/assets *.png
 

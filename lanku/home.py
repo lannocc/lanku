@@ -6,19 +6,30 @@ class Window(LWin):
     def __init__(self, app):
         super().__init__(app, 'lanku', 333, 555, save_name='home')
 
-        self.lbl_version = Label(f'lanku v{__version__}', batch=self.batch)
+        Label(self, 3, 3, f'lanku v{__version__}')
 
-        self.tabs = TabGroup()
-        self.frame.add_widget(Tab(self.tabs,
-            10, 50,
-            image('tab_peers-pushed.png'),
+        self.tabs = TabGroup(self, 40, 60, 200, 500)
+        self.tabs.tab(
+            Peers(self.tabs),
             image('tab_peers.png'),
-            image('tab_peers-hover.png'),
-            batch=self.batch))
-        self.frame.add_widget(Tab(self.tabs,
-            100, 50,
-            image('tab_nodes-pushed.png'),
+            image('tab_peers-active.png'),
+            image('tab_peers-hover.png'))
+        self.tabs.tab(
+            Nodes(self.tabs),
             image('tab_nodes.png'),
-            image('tab_nodes-hover.png'),
-            batch=self.batch))
+            image('tab_nodes-active.png'),
+            image('tab_nodes-hover.png'))
+
+class Peers(Component):
+    def __init__(self, parent):
+        super().__init__(parent, 0, 0)
+
+        Label(self, 3, 3, f'PEERS')
+
+
+class Nodes(Component):
+    def __init__(self, parent):
+        super().__init__(parent, 0, 0)
+
+        Label(self, 3, 3, f'NODES')
 

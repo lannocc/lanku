@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=lanku
+Comment=LANK User
+Exec=lanku
+Terminal=False
+Categories=Network;InstantMessaging;Chat;FileTransfer;P2P
+

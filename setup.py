@@ -29,6 +29,9 @@ def run():
             ],
         },
         include_package_data=True,
+        data_files = [
+            ('share/applications', ['com.lannocc.lanku.desktop']),
+        ],
     )
 
 
