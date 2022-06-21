@@ -26,6 +26,7 @@ class LWin(PWin):
         super().__init__(w, h, caption=caption, resizable=resizable,
             visible=False)
 
+        self.xywh = [0, 0, w, h]
         self.load()
         self.hidden = False
         self.minimized = False
@@ -244,6 +245,45 @@ class Button(Component, PushButton):
         self.cframe.add_widget(self)
 
 
+class ToggleButton(Button):
+    def __init__(self, parent, x, y, normal, pushed, hovering,
+            toggle_normal, toggle_pushed, toggle_hovering):
+        super().__init__(parent, x, y, normal, pushed, hovering)
+
+        self.normal = normal
+        self.pushed = pushed
+        self.hovering = hovering
+        self.toggle_normal = toggle_normal
+        self.toggle_pushed = toggle_pushed
+        self.toggle_hovering = toggle_hovering
+
+        self.toggled = False
+
+    def set_pos(self, x, y):
+        self.pos = [x, y]
+        pos = self.get_abs_pos()
+        self._x = pos[0]
+        self._y = pos[1]
+        self._update_position()
+
+    def on_press(self):
+        self.toggled = not self.toggled
+
+        if self.toggled:
+            self._depressed_img = self.toggle_normal
+            self._pressed_img = self.toggle_pushed
+            self._hover_img = self.toggle_hovering
+
+        else:
+            self._depressed_img = self.normal
+            self._pressed_img = self.pushed
+            self._hover_img = self.hovering
+
+        self.dispatch_event('on_toggle', self.toggled)
+
+ToggleButton.register_event_type('on_toggle')
+
+
 class TabGroup(Component):
     def __init__(self, parent, x, y, w, h):
         super().__init__(parent, x, y)
@@ -255,6 +295,15 @@ class TabGroup(Component):
         pos = self.get_abs_pos()
         self.rect = Rectangle(pos[0], pos[1], w, h, color=(42, 42, 42),
             batch=self.cbatch)
+
+    def set_size(self, w, h):
+        if w != self.size[0]:
+            self.rect.width = w
+
+        if h != self.size[1]:
+            self.rect.height = h
+
+        self.size = [w, h]
 
     def tab(self, panel, normal, active, hover):
         panel.hide()
