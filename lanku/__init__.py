@@ -4,6 +4,7 @@ from .node import Client as Node
 from .peer import Master as Peer
 from .systray import Icon as TrayIcon
 
+import lank.name
 import pyglet.app
 from PIL import Image, ImageDraw
 
@@ -79,12 +80,12 @@ class Application:
         print('finished')
 
     def notify(self, signed):
-        if signed.name == 10:
+        if signed.name == lank.name.REGISTER:
             self.tray_icon.notify(
                 f'{signed.label} has changed keys.',
                 f'{signed.label} | lanku')
 
-        elif signed.name == 20:
+        elif signed.name == lank.name.PEER:
             self.tray_icon.notify(
                 f'{signed.label} has signed on.',
                 f'{signed.label} | lanku')

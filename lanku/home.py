@@ -1,8 +1,9 @@
 from . import __version__
 from .ui import *
 from . import config
+from .peers import Panel as Peers
 
-import lank.peer
+from lank.peer import DEFAULT_PORT
 
 
 class Window(LWin):
@@ -51,13 +52,6 @@ class Window(LWin):
 
         else:
             self.app.disconnect()
-
-
-class Peers(Component):
-    def __init__(self, parent):
-        super().__init__(parent, 0, 0)
-
-        Label(self, 3, 3, f'PEERS')
 
 
 class Labels(Component):
@@ -110,14 +104,12 @@ class Labels(Component):
 
 
 class Config(Component):
-    PEER_PORT = lank.peer.DEFAULT_PORT
-
     def __init__(self, parent):
         super().__init__(parent, 0, 0)
 
         y = 100
         Label(self, 5, y, 'Local Port:')
-        self.peer_port = TextEntry(self, 100, y, 75, str(self.PEER_PORT))
+        self.peer_port = TextEntry(self, 100, y, 75, str(DEFAULT_PORT))
         y -= 40
         Label(self, 5, y, 'Label:')
         self.label = TextEntry(self, 100, y, 150, config.load_connect_label())

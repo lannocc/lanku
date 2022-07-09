@@ -123,7 +123,9 @@ class Client(Thread):
         try:
             while self.node:
                 try:
-                    while msg := self.input.get(timeout=KEEPALIVE):
+                    #while msg := self.input.get(timeout=KEEPALIVE):
+                    msg = self.input.get(timeout=KEEPALIVE)
+                    if msg:
                         if not self.node: break
                         self.send(msg)
 
@@ -145,7 +147,9 @@ class Client(Thread):
 
     def receiver(self):
         try:
-            while msg := self.recv():
+            #while msg := self.recv():
+            msg = self.recv()
+            while msg:
                 if isinstance(msg, Pong):
                     if not self.ping:
                         return self.error(f'received pong without ping: {msg}')
@@ -160,6 +164,8 @@ class Client(Thread):
 
                 else:
                     self.output.put(msg)
+
+                msg = self.recv()
 
             self.error('lost connection')
 
