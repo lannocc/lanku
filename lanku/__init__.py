@@ -92,7 +92,13 @@ class Application:
             self._notify_(signed.label, f'{signed.label} has changed keys.')
 
         elif signed.name == lank.name.PEER:
-            self._notify_(signed.label, f'{signed.label} has signed on.')
+            msg = f'{signed.label} signed on'
+            if ':' in signed.key[signed.key.index(':')+1:]:
+                alias = signed.key[signed.key.index(':')+1:]
+                alias = alias[alias.index(':')+1:]
+                msg += f' as {alias}'
+            msg += '.'
+            self._notify_(signed.label, msg)
 
         else:
             self._notify_(signed.label, f'{signed.label} has done something.')

@@ -107,9 +107,12 @@ class Config(Component):
     def __init__(self, parent):
         super().__init__(parent, 0, 0)
 
-        y = 100
+        y = 140
         Label(self, 5, y, 'Local Port:')
         self.peer_port = TextEntry(self, 100, y, 75, str(DEFAULT_PORT))
+        y -= 40
+        Label(self, 5, y, 'Alias:')
+        self.alias = TextEntry(self, 100, y, 150, config.load_connect_alias())
         y -= 40
         Label(self, 5, y, 'Label:')
         self.label = TextEntry(self, 100, y, 150, config.load_connect_label())

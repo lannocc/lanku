@@ -19,11 +19,14 @@ class Client(Thread):
 
         self.label = self.app.home.pnl_config.label.value
         self.pwd = self.app.home.pnl_config.pwd.value
+        #self.app.home.pnl_config.pwd.value = ''
         self.host = self.get_public_ip()
         self.port = int(self.app.home.pnl_config.peer_port.value)
+        self.alias = self.app.home.pnl_config.alias.value
 
         self.node = None
         self.ping = None
+        self.sign_on = False
         self.input = Queue(maxsize=1)
         self.output = Queue()
 
@@ -74,16 +77,20 @@ class Client(Thread):
         except ValueError as e:
             return self.error(f'failed to unlock private key: {e}')
 
-        msg = PeerOn(crypto.VERSION, self.label, self.host, self.port)
+        msg = PeerOn(crypto.VERSION, self.label, self.host, self.port,
+                     self.alias if self.alias else None)
         msg.signature = crypto.sign(priv_key, msg.to_sign(crypto))
 
+        self.sign_on = True
         self.input.put_nowait(msg)
         msg = self.output.get(timeout=GENERAL_TIMEOUT)
         if not msg: return
         if not isinstance(msg, Signed):
             return self.error(f'failed to sign on: {msg}')
+        self.sign_on = False
 
         config.save_connect_label(self.label)
+        config.save_connect_alias(self.alias)
 
         self.input.put_nowait(ListLabels())
         msg = self.output.get(timeout=GENERAL_TIMEOUT)
@@ -92,7 +99,7 @@ class Client(Thread):
             return self.error(f'failed to get labels list: {msg}')
 
         self.print(f'labels: {msg.labels}')
-        del msg.labels[msg.labels.index(self.label)]
+        #del msg.labels[msg.labels.index(self.label)]
         self.app.home.pnl_labels.refresh_labels(msg.labels)
 
         for label in msg.labels:
@@ -159,8 +166,11 @@ class Client(Thread):
 
                     self.ping = None
 
-                elif isinstance(msg, Signed) and msg.label != self.label:
+                elif isinstance(msg, Signed):
                     self.app.notify(msg)
+
+                    if self.sign_on:
+                        self.output.put(msg)
 
                 else:
                     self.output.put(msg)

@@ -37,6 +37,12 @@ def load_connect_label():
 def save_connect_label(label):
     _save_('label', label)
 
+def load_connect_alias():
+    return _load_('alias')
+
+def save_connect_alias(alias):
+    _save_('alias', alias)
+
 def load_interests():
     config = _load_('interests')
     if config is None: return [ ]
