@@ -1,7 +1,7 @@
 from lank.peer import Master as Base
 from lank.crypto import get_handler as get_crypto
 from requests import get
-from miniupnpc import UPnP
+#from miniupnpc import UPnP
 
 
 class Master(Base):
@@ -12,6 +12,7 @@ class Master(Base):
     def get_public_ip(self):
         return get('https://api.ipify.org').content.decode('utf-8')
 
+    '''
     def upnp(self):
         upnp = UPnP()
         upnp.discoverdelay = 10
@@ -19,4 +20,5 @@ class Master(Base):
         upnp.selectigd()
         upnp.addportmapping(self.port, 'TCP', upnp.lanaddr,
                             self.port, 'lanku', '')
+    '''
 

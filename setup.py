@@ -20,7 +20,7 @@ def run():
         install_requires=[
             'appdirs',
             'lank >= 0.3.4',
-            'miniupnpc',
+            #'miniupnpc',
             'pyglet',
             'pystray',
             'requests',
