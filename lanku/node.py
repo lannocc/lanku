@@ -182,7 +182,7 @@ class Client(Thread):
         return msg
 
     def get_public_ip(self):
-        ip = get('https://api.ipify.org').content.decode('utf-8')
+        ip = get('http://api.ipify.org').content.decode('utf-8')
         self.print(f' - our public IP address: {ip}')
         return ip
 

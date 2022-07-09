@@ -1,6 +1,8 @@
 Copyright (C) 2022 LANNOCC (Shawn A. Wilson)
 @%@~LICENSE:MIT~@%@
 
+saw_070922_3 - Use HTTP instead of HTTPS when getting public IP (raspbian).
+
 saw_070922_2 - Allow running without system tray support (raspbian).
 
 saw_070922_1 - Remove Python-3.8 syntax magic so we can run on 3.7 (raspbian).
