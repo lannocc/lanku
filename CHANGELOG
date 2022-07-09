@@ -1,6 +1,8 @@
 Copyright (C) 2022 LANNOCC (Shawn A. Wilson)
 @%@~LICENSE:MIT~@%@
 
+saw_070822_1 - Node sign-on and label interest now working!
+
 saw_062122_1 - Resizing the tab group and adding a connect button.
 
 saw_061922_2 - Improved placement which considers window decorations offset.

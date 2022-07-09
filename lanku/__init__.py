@@ -1,11 +1,14 @@
 from .__version__ import __version__
-from .systray import Icon as TrayIcon
 from .home import Window as Home
+from .node import Client as Node
+from .peer import Master as Peer
+from .systray import Icon as TrayIcon
 
 import pyglet.app
 from PIL import Image, ImageDraw
 
 from threading import Thread
+import sys
 
 
 #icon.notify('this is a test', 'lanku alert')
@@ -15,7 +18,10 @@ class Application:
     def __init__(self):
         self.icon = create_image(64, 64, 'green', 'white')
         self.tray_icon = TrayIcon(self)
-        self.tray = Thread(target=self.tray_icon.run)
+        self.tray_thread = Thread(target=self.tray_icon.run)
+
+        self.node = None
+
         self.home = Home(self)
 
         self.finished = False
@@ -24,7 +30,7 @@ class Application:
     def run(self):
         print(f'lanku v{__version__}')
         try:
-            self.tray.start()
+            self.tray_thread.start()
             self.show_hide()
             pyglet.app.run()
             self.finished = True
@@ -34,7 +40,7 @@ class Application:
 
         finally:
             self.quit()
-            self.tray.join()
+            self.tray_thread.join()
 
     def show_hide(self):
         if self.home.minimized:
@@ -42,8 +48,6 @@ class Application:
 
         else:
             self.home.set_visible(not self.home.visible)
-            #if self.home.visible:
-            #    self.home.set_location(100, 100)
 
     def quit(self):
         if self.exiting: return
@@ -55,7 +59,40 @@ class Application:
         if not self.finished:
             self.home.save()
 
+        self.disconnect()
         pyglet.app.exit()
+
+    def connect(self):
+        print('connecting')
+        #print(f'pass: {self.home.pnl_config.pwd.value}')
+
+        self.node = Node(self)
+        self.node.start()
+
+    def disconnect(self):
+        if not self.node: return
+        print('disconnecting')
+        node = self.node
+        self.node = None
+        node.stop()
+        node.join()
+        print('finished')
+
+    def notify(self, signed):
+        if signed.name == 10:
+            self.tray_icon.notify(
+                f'{signed.label} has changed keys.',
+                f'{signed.label} | lanku')
+
+        elif signed.name == 20:
+            self.tray_icon.notify(
+                f'{signed.label} has signed on.',
+                f'{signed.label} | lanku')
+
+        else:
+            self.tray_icon.notify(
+                f'{signed.label} has done something.',
+                f'{signed.label} | lanku')
 
 
 def create_image(width, height, color1, color2):

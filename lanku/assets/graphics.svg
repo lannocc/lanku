@@ -24,7 +24,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="495.78719"
+     inkscape:cx="434.0099"
      inkscape:cy="272.82389"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -45,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -131,16 +131,16 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#803300;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="97.328568"
+       x="97.260353"
        y="58.41584"
        id="text843"
        inkscape:export-xdpi="93.591385"
        inkscape:export-ydpi="93.591385"><tspan
          sodipodi:role="line"
          id="tspan841"
-         x="97.328568"
+         x="97.260353"
          y="58.41584"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Nodes</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Labels</tspan></text>
     <rect
        style="fill:#f2ff80;fill-opacity:1;stroke:#280b0b;stroke-width:0.190895"
        id="rect845"
@@ -162,29 +162,29 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#803300;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="97.328568"
+       x="97.260353"
        y="65.709221"
        id="text851"
        inkscape:export-xdpi="93.591385"
        inkscape:export-ydpi="93.591385"><tspan
          sodipodi:role="line"
          id="tspan849"
-         x="97.328568"
+         x="97.260353"
          y="65.709221"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Nodes</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Labels</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#803300;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="97.328568"
+       x="97.260353"
        y="73.002609"
        id="text855"
        inkscape:export-xdpi="93.591385"
        inkscape:export-ydpi="93.591385"><tspan
          sodipodi:role="line"
          id="tspan853"
-         x="97.328568"
+         x="97.260353"
          y="73.002609"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Nodes</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Labels</tspan></text>
     <rect
        style="fill:#b3ff80;stroke:#280b0b;stroke-width:0.223882"
        id="rect848"
@@ -328,5 +328,71 @@
          x="150.64404"
          y="72.997513"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Disconnect</tspan></text>
+    <rect
+       style="fill:#b3ff80;stroke:#280b0b;stroke-width:0.190895"
+       id="rect868"
+       width="22.606083"
+       height="7.2933831"
+       x="47.381439"
+       y="53.181648"
+       inkscape:export-xdpi="93.591385"
+       inkscape:export-ydpi="93.591385" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#803300;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="52.030628"
+       y="58.318687"
+       id="text872"
+       inkscape:export-xdpi="93.591385"
+       inkscape:export-ydpi="93.591385"><tspan
+         sodipodi:role="line"
+         id="tspan870"
+         x="52.030628"
+         y="58.318687"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Config</tspan></text>
+    <rect
+       style="fill:#f2ff80;fill-opacity:1;stroke:#280b0b;stroke-width:0.190895"
+       id="rect874"
+       width="22.606083"
+       height="7.2933831"
+       x="47.381439"
+       y="60.475033"
+       inkscape:export-xdpi="93.591385"
+       inkscape:export-ydpi="93.591385" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#803300;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="52.030628"
+       y="65.612076"
+       id="text879"
+       inkscape:export-xdpi="93.591385"
+       inkscape:export-ydpi="93.591385"><tspan
+         sodipodi:role="line"
+         id="tspan877"
+         x="52.030628"
+         y="65.612076"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Config</tspan></text>
+    <rect
+       style="fill:#80f5ff;fill-opacity:1;stroke:#280b0b;stroke-width:0.190895"
+       id="rect881"
+       width="22.606083"
+       height="7.2933831"
+       x="47.381439"
+       y="67.768417"
+       inkscape:export-xdpi="93.591385"
+       inkscape:export-ydpi="93.591385" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#803300;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="52.030628"
+       y="72.905457"
+       id="text885"
+       inkscape:export-xdpi="93.591385"
+       inkscape:export-ydpi="93.591385"><tspan
+         sodipodi:role="line"
+         id="tspan883"
+         x="52.030628"
+         y="72.905457"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';fill:#803300;stroke-width:0.264583">Config</tspan></text>
   </g>
 </svg>

@@ -19,9 +19,11 @@ def run():
         ],
         install_requires=[
             'appdirs',
-            'lank',
+            'lank >= 0.3.4',
+            'miniupnpc',
             'pyglet',
             'pystray',
+            'requests',
         ],
         entry_points = {
             'console_scripts': [
