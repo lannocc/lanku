@@ -1,6 +1,8 @@
 Copyright (C) 2022 LANNOCC (Shawn A. Wilson)
 @%@~LICENSE:MIT~@%@
 
+saw_070822_3 - Now saving and automatically subscribing to label interests.
+
 saw_070822_2 - Remove miniupnpc dependency (fails to build on Windows).
 
 saw_070822_1 - Node sign-on and label interest now working!

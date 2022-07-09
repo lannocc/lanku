@@ -1,3 +1,5 @@
+from . import config
+
 from lank.node import NODES, HELLO_TIMEOUT, GENERAL_TIMEOUT, KEEPALIVE
 from lank.node.protocol.v2 import *
 from lank.crypto import get_handler as get_crypto
@@ -81,17 +83,21 @@ class Client(Thread):
         if not isinstance(msg, Signed):
             return self.error(f'failed to sign on: {msg}')
 
+        config.save_connect_label(self.label)
+
         self.input.put_nowait(ListLabels())
         msg = self.output.get(timeout=GENERAL_TIMEOUT)
         if not msg: return
         if not isinstance(msg, LabelsList):
             return self.error(f'failed to get labels list: {msg}')
 
-        self.print('labels:')
-        for label in msg.labels:
-            self.print(f' - {label}')
+        self.print(f'labels: {msg.labels}')
         del msg.labels[msg.labels.index(self.label)]
         self.app.home.pnl_labels.refresh_labels(msg.labels)
+
+        for label in msg.labels:
+            if label in self.app.home.pnl_labels.interests:
+                self.input.put(LabelInterest(label))
 
     def notify(self, label, notify=True):
         self.input.put_nowait(

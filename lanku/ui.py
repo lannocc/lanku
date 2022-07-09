@@ -288,6 +288,9 @@ class Component:
             pos = self.parent.get_abs_pos()
             return [pos[0] + self.pos[0], pos[1] + self.pos[1]]
 
+    def null(self, dt):
+        pass
+
 
 class Label(Component, PLabel):
     def __init__(self, parent, x, y, text):
@@ -363,8 +366,13 @@ class Button(Component, PushButton):
 
 class ToggleButton(Button):
     def __init__(self, parent, x, y, normal, pushed, hovering,
-            toggle_normal, toggle_pushed, toggle_hovering):
-        super().__init__(parent, x, y, normal, pushed, hovering)
+            toggle_normal, toggle_pushed, toggle_hovering, toggled=False):
+
+        if toggled:
+            super().__init__(parent, x, y, toggle_normal, toggle_pushed,
+                             toggle_hovering)
+        else:
+            super().__init__(parent, x, y, normal, pushed, hovering)
 
         self.normal = normal
         self.pushed = pushed
@@ -373,7 +381,7 @@ class ToggleButton(Button):
         self.toggle_pushed = toggle_pushed
         self.toggle_hovering = toggle_hovering
 
-        self._toggled_ = False
+        self._toggled_ = toggled
 
     @property
     def toggled(self):
