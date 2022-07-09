@@ -2,7 +2,6 @@ from .__version__ import __version__
 from .home import Window as Home
 from .node import Client as Node
 from .peer import Master as Peer
-from .systray import Icon as TrayIcon
 
 import lank.name
 import pyglet.app
@@ -12,14 +11,21 @@ from threading import Thread
 import sys
 
 
-#icon.notify('this is a test', 'lanku alert')
-
-
 class Application:
     def __init__(self):
+        print(f'lanku v{__version__}')
         self.icon = create_image(64, 64, 'green', 'white')
-        self.tray_icon = TrayIcon(self)
-        self.tray_thread = Thread(target=self.tray_icon.run)
+        try:
+            from .systray import Icon as TrayIcon
+            self.tray_icon = TrayIcon(self)
+            self.tray_thread = Thread(target=self.tray_icon.run)
+
+        except Exception as e:
+            em = str(e)
+            if not em: em = type(e)
+            print(f'WARNING - Unable to setup system tray icon: {em}')
+            self.tray_icon = None
+            self.tray_thread = None
 
         self.node = None
 
@@ -29,9 +35,9 @@ class Application:
         self.exiting = False
 
     def run(self):
-        print(f'lanku v{__version__}')
         try:
-            self.tray_thread.start()
+            if self.tray_thread:
+                self.tray_thread.start()
             self.show_hide()
             pyglet.app.run()
             self.finished = True
@@ -41,7 +47,8 @@ class Application:
 
         finally:
             self.quit()
-            self.tray_thread.join()
+            if self.tray_thread:
+                self.tray_thread.join()
 
     def show_hide(self):
         if self.home.minimized:
@@ -55,7 +62,8 @@ class Application:
         self.exiting = True
         print('quit')
 
-        self.tray_icon.stop()
+        if self.tray_icon:
+            self.tray_icon.stop()
 
         if not self.finished:
             self.home.save()
@@ -81,19 +89,21 @@ class Application:
 
     def notify(self, signed):
         if signed.name == lank.name.REGISTER:
-            self.tray_icon.notify(
-                f'{signed.label} has changed keys.',
-                f'{signed.label} | lanku')
+            self._notify_(signed.label, f'{signed.label} has changed keys.')
 
         elif signed.name == lank.name.PEER:
-            self.tray_icon.notify(
-                f'{signed.label} has signed on.',
-                f'{signed.label} | lanku')
+            self._notify_(signed.label, f'{signed.label} has signed on.')
 
         else:
-            self.tray_icon.notify(
-                f'{signed.label} has done something.',
-                f'{signed.label} | lanku')
+            self._notify_(signed.label, f'{signed.label} has done something.')
+
+    def _notify_(self, title, msg):
+        if self.tray_icon:
+            self.tray_icon.notify(msg, f'{title} | lanku')
+
+        else:
+            print(f'@@ NOTICE [{title}] @@')
+            print(f'   >>   {msg}')
 
 
 def create_image(width, height, color1, color2):
