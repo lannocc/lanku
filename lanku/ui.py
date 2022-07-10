@@ -103,7 +103,7 @@ class LWin(PWin):
             self.xywh[1] += self.offset[1]
             #print(f'adjusted xywh: {self.xywh}')
 
-        self.offset_for = None
+        #self.offset_for = None
 
     def null(self, dt):
         #print('null')

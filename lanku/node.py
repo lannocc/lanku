@@ -25,10 +25,12 @@ class Client(Thread):
         self.alias = self.app.home.pnl_config.alias.value
 
         self.node = None
-        self.ping = None
-        self.sign_on = False
         self.input = Queue(maxsize=1)
         self.output = Queue()
+
+        self.ping = None
+        self.sign_on = False
+        self.history_callback = None
 
         self.sender_thread = Thread(
             name='node-client-sender', target=self.sender)
@@ -110,6 +112,13 @@ class Client(Thread):
         self.input.put_nowait(
             LabelInterest(label) if notify else LabelIgnore(label))
 
+    def get_history(self, label, callback):
+        if self.history_callback:
+            return self.error(f'never received last history request')
+
+        self.history_callback = callback
+        self.input.put_nowait(GetHistory(label))
+
     def stop(self):
         if not self.node: return
         node = self.node
@@ -171,6 +180,9 @@ class Client(Thread):
 
                     if self.sign_on:
                         self.output.put(msg)
+
+                elif isinstance(msg, History) and self.history_callback:
+                    self.history_callback(msg)
 
                 else:
                     self.output.put(msg)

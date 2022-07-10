@@ -66,8 +66,9 @@ class Labels(Component):
         clock.schedule_once(self._refresh_labels_, 0, labels)
 
     def _refresh_labels_(self, dt, labels=None):
-        for button, label in self.labels:
-            button.remove()
+        for interest, peer, label in self.labels:
+            interest.remove()
+            peer.remove()
             label.delete()
 
         self.labels = [ ]
@@ -75,7 +76,7 @@ class Labels(Component):
         if labels:
             y = 30
             for label in labels:
-                def toggle(label):
+                def interest(label):
                     def toggler(toggled):
                         if toggled:
                             if label not in self.interests:
@@ -89,7 +90,7 @@ class Labels(Component):
 
                     return toggler
 
-                btn = ToggleButton(self, 3, y,
+                bell = ToggleButton(self, 3, y,
                     image('btn_bell.png'),
                     image('btn_bell-push.png'),
                     image('btn_bell-hover.png'),
@@ -97,9 +98,27 @@ class Labels(Component):
                     image('btn_bell-hover.png'),
                     image('btn_bell-push.png'),
                     label in self.interests)
-                btn.on_toggle = toggle(label)
+                bell.on_toggle = interest(label)
 
-                self.labels.append((btn, Label(self, 33, y+7, label)))
+                def peer_toggle(label):
+                    def toggler(toggled):
+                        if toggled:
+                            self.win.app.home.pnl_peers.add_peer(label)
+                        else:
+                            self.win.app.home.pnl_peers.del_peer(label)
+
+                    return toggler
+
+                peer = ToggleButton(self, 35, y,
+                    image('btn_peer.png'),
+                    image('btn_peer-push.png'),
+                    image('btn_peer-hover.png'),
+                    image('btn_peer-push.png'),
+                    image('btn_peer-hover.png'),
+                    image('btn_peer-push.png'))
+                peer.on_toggle = peer_toggle(label)
+
+                self.labels.append((bell, peer, Label(self, 70, y+7, label)))
                 y += 30
 
 
