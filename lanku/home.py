@@ -134,7 +134,8 @@ class Config(Component):
         self.alias = TextEntry(self, 100, y, 150, config.load_connect_alias())
         y -= 40
         Label(self, 5, y, 'Label:')
-        self.label = TextEntry(self, 100, y, 150, config.load_connect_label())
+        label = config.load_connect_label() or 'anonymous'
+        self.label = TextEntry(self, 100, y, 150, label)
         y -= 40
         Label(self, 5, y, 'Password:')
         self.pwd = TextEntry(self, 100, y, 150, mask='*')

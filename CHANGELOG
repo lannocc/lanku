@@ -1,6 +1,8 @@
 Copyright (C) 2022 LANNOCC (Shawn A. Wilson)
 @%@~LICENSE:MIT~@%@
 
+saw_071022_2 - Add "anonymous" label as default.
+
 saw_071022_1 - Beginning to add peer functions.
 
 saw_070922_4 - Add alias option. Allow self-interest.
